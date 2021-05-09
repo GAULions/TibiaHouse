@@ -15,6 +15,7 @@ dependencies {
     testImplementation(kotlin("test-junit"))
     implementation("org.jsoup", "jsoup", "1.13.1")
     implementation("org.apache.httpcomponents", "httpclient", "4.5.12")
+    implementation("mysql:mysql-connector-java:5.1.+")
 }
 
 tasks.test {

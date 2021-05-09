@@ -56,13 +56,14 @@ class CrawlerApplication {
             val execute = HttpClients.createDefault().execute(request)
             val html = EntityUtils.toString(execute.entity)
             val table = Jsoup.parse(html).select("#houses > div.Border_2 > div > div > table> tbody > tr")
-            val td = table.filterIndexed { index, element -> index > 1 }.map {
-                Auctioned(it.select("td:nth-child(1) > nobr").html().replace("&nbsp;", " "),
-                    it.select("td:nth-child(2) > nobr").html().replace("&nbsp;", " "),
-                    it.select("td:nth-child(3) > nobr").html().replace("&nbsp;", " "),
-                    it.select("td:nth-child(4) > nobr").html().replace("&nbsp;", " "))
+            return table.filterIndexed { index, _ -> index > 1 }.map {
+                Auctioned(
+                    it.select("td:nth-child(1) > nobr").html().replace("&nbsp;", ""),
+                    it.select("td:nth-child(2) > nobr").html().replace("&nbsp;", ""),
+                    it.select("td:nth-child(3) > nobr").html().replace("&nbsp;", ""),
+                    it.select("td:nth-child(4) > nobr").html().replace("&nbsp;", "")
+                )
             }.toMutableList()
-            return td
         }
 
         @JvmStatic
@@ -75,7 +76,6 @@ class CrawlerApplication {
                     getHouses(world, town)
                 }
             }
-            println("oi")
         }
     }
 }
