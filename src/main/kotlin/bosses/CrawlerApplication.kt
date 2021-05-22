@@ -29,7 +29,9 @@ class CrawlerApplication {
             }
         }
         private val relationBosses: HashMap<String, Int> = hashMapOf(
-            "Ocyakao" to -1, "Zushuka" to -1, "The Welter" to -1, "Shlorg" to -1, "Tyrn" to -1, "Yeti" to -1
+            "Ocyakao" to -1, "Zushuka" to -1, "The Welter" to -1, "Shlorg" to -1, "Tyrn" to -1, "Yeti" to -1,
+            "Sir Valorcrest" to -1, "Zevelon Duskbringer" to -1, "Diblis the Fair" to -1, "Arachir the Ancient One" to -1, "Shlorg" to -1,
+            "Weakened Shlorg" to -1, "undead cavebears" to -1
         )
         private val relationWorlds: MutableList<String> = mutableListOf(
             "Inabra"
@@ -53,7 +55,7 @@ class CrawlerApplication {
             table.filterIndexed { index, _ -> index > 2 && index < table.size-1 }.map {
                 val name = it.select("td:nth-child(1)").html().replace("&nbsp;", "")
                 if (relationBosses.containsKey(name)) {
-                    kills.add(KillStatistic(name,
+                    kills.add(KillStatistic(name.toLowerCase(),
                         it.select("td:nth-child(3)").html().replace("&nbsp;", "").toLong(),
                         it.select("td:nth-child(4)").html().replace("&nbsp;", "").toLong())
                     )
@@ -85,11 +87,13 @@ class CrawlerApplication {
 
         @JvmStatic
         fun main(args: Array<String>) {
+            println("Iniciado Processo de inserção de estatisticas dos bosses")
             val monstersDb = CrawlerApplication.getMonsters()
             for (world in relationWorlds) {
                 val monsters = getMonsters(world)
                 insertStatistic(monsters, monstersDb)
             }
+            println("Terminado Processo de inserção de estatisticas dos bosses")
         }
     }
 

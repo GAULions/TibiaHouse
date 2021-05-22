@@ -23,7 +23,7 @@ class CrawlerApplication {
             println("Conexão realizada com sucesso")
             conexao.autoCommit = false
             for (monster in tibiaMonsters) {
-                if (!dbMonsters.containsKey(monster.name)) {
+                if (!dbMonsters.containsKey(monster.name.toLowerCase())) {
                     val name = monster.name.replace("'", "\\'")
                     println("NOVO MONSTRO: $name")
                     val sql = """
@@ -37,7 +37,7 @@ class CrawlerApplication {
                 }
             }
             for (monster in tibiaFandomMonsters) {
-                if (!dbMonsters.containsKey(monster.name)) {
+                if (!dbMonsters.containsKey(monster.name.toLowerCase())) {
                     val name = monster.name.replace("'", "\\'")
                     println("NOVO MONSTRO: $name")
                     val sql = """
@@ -62,7 +62,7 @@ class CrawlerApplication {
             while (rs.next()) {
                 val id = rs.getInt("id_monster")
                 val name = rs.getString("name")
-                monsters[name] = Monster(id, name)
+                monsters[name.toLowerCase()] = Monster(id, name.toLowerCase())
             }
             rs.close()
             conexao.close()
@@ -103,10 +103,12 @@ class CrawlerApplication {
 
         @JvmStatic
         fun main(args: Array<String>) {
+            println("Iniciado Processo de atualizar informações dos monstros")
             val monsters = getInTibiaMonsters()
             val bosses = getInTibiaFandomBosses()
             val monstersDb = getMonsters()
             insertNewMonsters(monsters, bosses, monstersDb)
+            println("Terminado Processo de atualizar informações dos monstros")
         }
 
     }
